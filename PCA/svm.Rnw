@@ -1,0 +1,80 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+
+<<>>=
+library(e1071)
+library(MASS)
+library(AtmRay)
+library(varhandle)
+library(rgl)
+
+media1 = c(2,2)
+sigma1 = diag(2.5)
+classe1 = mvrnorm(n=50, media1, sigma1)
+
+media2 = c(5,5)
+sigma2 = diag(2.5)
+classe2 = mvrnorm(n=50, media2, sigma2)
+
+xlim=c(-3,8)
+ylim=c(-3,8)
+
+plot(classe1[,1], classe1[,2], xlim=xlim, ylim=ylim, xlab='x1', ylab='x2')
+par(new=T)
+plot(classe2[,1], classe2[,2], xlim=xlim, ylim=ylim, col='red', xlab='x1', ylab='x2')
+
+# Rotula classes
+D = c(rep(-1,nrow(classe1)), rep(1,nrow(classe2)))
+D = as.factor(D)
+
+# Monta dados de treinamento e de teste
+X = rbind(classe1,classe2)
+X = cbind(X,D)
+shuffle = sample(nrow(X))
+X = X[shuffle,] 
+D = D[shuffle]
+
+Xtrain = X[1:(0.7*nrow(X)),]
+Xtest = X[(0.7*nrow(X)+1):nrow(X),]
+Dtrain = D[1:(0.7*nrow(X)),]
+Dtest = D[(0.7*nrow(X)+1):nrow(X),]
+
+Xtrain = data.frame(xtrain)
+Xtest = data.frame(xtest)
+
+# Aplicando SVM
+svm.model = svm(Dtrain ~ ., data = Xtrain[,1:2], cost=1, gamma=1)
+svm.pred = predict(svm.model, Xtest[,1:2])
+
+# Plotando a separacao
+intervalo = seq(from=-3,to=8,by=0.2)
+grid = meshgrid(intervalo,intervalo)
+grid$z = matrix(nrow=nrow(grid$x), ncol=ncol(grid$x))
+amostra = matrix(nrow=1,ncol=2)
+
+for(i in c(1:ncol(grid$x))) {
+  for(j in c(1:ncol(grid$y))) {
+    amostra[1,1] = grid$x[i,j]
+    amostra[1,2] = grid$y[i,j]
+    svm.pred = predict(svm.model, amostra)
+    aux = as.numeric(svm.pred)
+    if(aux==2) {
+      aux = -1
+    }
+    grid$z[i,j] = aux
+  }
+}
+
+par(new=T)
+
+contour(intervalo, intervalo, grid$z, xlim=xlim, ylim=ylim, drawlabels=F, nlevels=1)
+@
+
+<<>>=
+# Obtenção dos dados estatísticos
+@
+
+\end{document}
