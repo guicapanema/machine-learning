@@ -46,9 +46,10 @@ validation <- list(Attributes=attributes[(trainLim+1):valLim,], Classes=classes[
 test <- list(Attributes=attributes[(valLim+1):nrow(attributes),], Classes=classes[(valLim+1):nrow(attributes)])
 
 model <- mySVM(training, validation, c(0.1,2))
-pred = predict(model, test$Attributes)
-err = sum(pred != test$Classes)
-print(err)
+pred <- predict(model, test$Attributes)
+err <- sum(pred != test$Classes)
+acc <- 1 - err/length(pred)
+print(acc)
 
 # Calculating 2D SVM
 attributes = proj2D[swap,]
@@ -59,7 +60,8 @@ test <- list(Attributes=attributes[(valLim+1):nrow(attributes),], Classes=classe
 model2D <- mySVM(training, validation, c(0.1,2))
 pred2D <- predict(model2D, test$Attributes)
 err2D <- sum(pred2D != test$Classes)
-print(err2D)
+acc2D <- 1 - err2D/length(pred2D)
+print(acc2D)
 
 # Calculating 3D SVM
 attributes = proj3D[swap,]
@@ -69,6 +71,6 @@ test <- list(Attributes=attributes[(valLim+1):nrow(attributes),], Classes=classe
 
 model3D <- mySVM(training, validation, c(0.1,2))
 pred3D <- predict(model3D, test$Attributes)
-err3D <- sum(pred2D != test$Classes)
-print(err3D)
-
+err3D <- sum(pred3D != test$Classes)
+acc3D <- 1 - err3D/length(pred3D)
+print(acc3D)
