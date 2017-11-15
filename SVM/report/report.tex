@@ -1,0 +1,64 @@
+\documentclass[a4paper]{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{indentfirst}
+
+\lstset{
+numbers=left,
+numberstyle=\small,
+numbersep=8pt,
+language=R,
+breaklines=true,
+tabsize=4}
+
+\title{Trabalho Final - SVM}
+
+\author{Reconhecimento de Padrões - UFMG}
+
+\date{\small{Guilherme Capanema de Barros (\today)}}
+
+\begin{document}
+\maketitle
+
+\section{Introdução}
+
+SVMs (\textit{Support Vector Machines}) são modelos de aprendizado supervisionado que permitem solucionar tanto problemas de classificação como de regressão.
+
+Em geral, as SVMs possuem dois parâmetros de ajuste:
+
+\begin{description}
+	\item [C] é o parâmetro de custo. Quanto maior for o valor de C, mais custoso é considerado um erro de classificação, de forma a tender ao \textit{overfitting}.
+	
+	\item [$\gamma$] é o parâmetro do \textit{kernel}. Para funções de \textit{kernel} gaussianas, está relacionado ao raio da base de cada uma. Dessa forma, a diminuição de $\gamma$ tende ao \textit{overfitting}.
+
+\end{description}
+\section{Escolha dos parâmetros}
+
+
+\subsection{\textit{Grid Search}}
+
+Uma das formas mais comuns de seleção automática dos parâmetros das SVMs é uma busca exaustiva por diversas combinações de C e $\gamma$. 
+
+O método, chamado \textit{grid search}, gera valores para os parâmetros em intervalos definidos. Para cada combinação, o desempenho do modelo é avaliado, por exemplo, usando validação cruzada.
+
+Com um espaçamento suficientemente pequeno entre os valores, o \textit{grid serach} é capaz de encontrar parâmetros muito próximos dos ótimos. No entanto, o custo computacional é muito alto.
+
+\subsection{\textit{Simmulated Annealing}}
+
+Para reduzir o número de parâmetros avaliados e, assim, reduzir o custo computacional da seleção de parâmetros, podem ser aplicados métodos de otimização.
+
+Como, em geral, a função de custo é fortemente multimodal, métodos baseados em gradiente descendente tendem a mínimos locais. Assim, a aplicação de metaheurísticas (MHs) se torna interessante.
+
+Uma possibilidade é aplicar a MH \textit{Simmulated Annealing} (SA), baseada no recozimento de metais. A SA aceita movimentos de piora com uma probabilidade que decresce com o número de iterações, de forma a explorar bem o espaço de busca e, ao final, convergir para uma bacia de atração. Embora não haja garantia de otimalidade global, a SA tende a encontrar resultados bem próximos.
+
+
+\begin{thebibliography}{9}
+\bibitem{boardman} BOARDMAN, Matthew and Thomas TRAPPENBERG, 2006. A Heuristic for Free Parameter Optimization with Support Vector Machines, Proceedings of the 2006 IEEE International Joint Conference on Neural Networks (IJCNN 2006), pp. 1337-1344.
+\bibitem{mbault} MBAULT, F. and K. LEBART, 2004. A stochastic optimization approach for parameter tuning of support vector machines, Proceedings of the 17th International Conference on Pattern Recognition (ICPR 2004), Volume 4, Pages 597-600.
+\end{thebibliography}
+
+\end{document}

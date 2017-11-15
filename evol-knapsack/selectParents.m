@@ -3,28 +3,24 @@ function parents = selectParents(pop, jPop, pc)
 % Seleciona os pais usando uma roleta proporcional ao fitness
 
 popSize = size(pop)(1);
-nTurns = popSize/2;
-selectedParents = zeros(nTurns,2);
+matingPool = zeros(size(pop));
+
 
 % Montando a roleta
-rouletteSum = floor(sum(jPop));
+aVec = jPop/sum(jPop);
 
+currentMember = 1;
 
-roulette = zeros(rouletteSum, 1);
-
-lastPos = 1;
-for (i = 1:popSize)
-	nRoulettePos = jPop(i);
-	for (j = 1:nRoulettePos)
-		roulette(lastPos) = i;
-		lastPos = lastPos + 1;
+while (currentMember <= popSize)
+	r = rand();
+	i = 0;
+	a = 0;
+	while(a < r)
+		i = i+1;
+		a = a + aVec(i);
 	end
+	matingPool(currentMember,:) = pop(i,:);
+	currentMember = currentMember + 1;
 end
 
-% Rodando a roleta
-for (i = 1:nTurns)
-	selectedParents(i,:) = randperm(rouletteSum, 2);
-end
-
-
-parents = selectedParents;
+parents = matingPool;
